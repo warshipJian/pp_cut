@@ -387,18 +387,30 @@
             let statusTimer = null;
             
             // 复制到剪切板功能
-            copyBtn.addEventListener('click', async function() {
+            copyBtn.addEventListener('click', function() {
                 if (!clipboardText.value.trim()) {
                     showStatus('文本内容为空，无法复制', 'error');
                     return;
                 }
                 
+                // 创建临时textarea元素
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = clipboardText.value;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                
                 try {
-                    await navigator.clipboard.writeText(clipboardText.value);
-                    showStatus('文本已成功复制到剪切板', 'success');
+                    const success = document.execCommand('copy');
+                    if (success) {
+                        showStatus('文本已成功复制到剪切板', 'success');
+                    } else {
+                        showStatus('复制失败，请手动复制文本', 'error');
+                    }
                 } catch (err) {
                     showStatus('复制失败，请手动复制文本', 'error');
                     console.error('复制失败:', err);
+                } finally {
+                    document.body.removeChild(tempTextArea);
                 }
             });
             
