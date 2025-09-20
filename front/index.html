@@ -129,17 +129,57 @@
         
         .password-input {
             flex: 1;
-            min-width: 200px;
-            padding: 12px 15px;
+            min-width: 180px;
+            padding: 8px 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
+        }
+        
+        .password-input::placeholder {
+            font-size: 13px;
         }
         
         .password-input:focus {
             outline: none;
             border-color: #3498db;
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .password-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-tooltip {
+            margin-left: 8px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .password-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            line-height: 1.4;
         }
         
         .info-text {
@@ -156,10 +196,10 @@
         }
         
         .btn {
-            padding: 14px 32px;
+            padding: 8px 14px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
@@ -186,13 +226,23 @@
         }
         
         .status-message {
-            text-align: center;
-            margin-top: 20px;
-            padding: 12px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
             border-radius: 8px;
             font-size: 14px;
             display: none;
-            flex-shrink: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         
         .status-success {
@@ -212,6 +262,21 @@
                 height: auto;
                 min-height: auto;
                 padding: 20px;
+            }
+            
+            .description {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+            
+            .tooltip-text {
+                bottom: auto;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-top: 8px;
             }
             
             .password-row {
@@ -243,7 +308,9 @@
 <body>
     <div class="container">
         <h1>平平剪切板</h1>
-        <p class="description">其他设备访问 c.xiaoxiaoguo.cn 获取内容</p>
+        <p class="description">其他设备访问 c.xiaoxiaoguo.cn 获取数据</p>
+
+        <div id="statusMessage" class="status-message"></div>
         
         <div class="text-area-container">
             <textarea id="clipboardText" placeholder="在此输入或粘贴文本内容..."></textarea>
@@ -259,17 +326,24 @@
         <div class="password-section">
             <div class="password-row">
                 <span class="password-label">输入口令</span>
-                <input type="text" id="passwordInput" class="password-input" placeholder="可选，用于区分不同用户的剪切板">
+                <div class="password-input-container">
+                    <input type="text" id="passwordInput" class="password-input" placeholder="可选">
+                    <span class="password-tooltip">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12" y2="8"></line>
+                        </svg>
+                        <span class="tooltip-text">口令用于标识不同的用户，不输入时系统将使用您的公网IP作为标识</span>
+                    </span>
+                </div>
             </div>
-            <p class="info-text">如果不输入口令，系统将使用您的公网IP作为标识</p>
         </div>
         
         <div class="action-buttons">
             <button class="btn btn-primary" id="getBtn">获取数据</button>
             <button class="btn btn-secondary" id="submitBtn">提交数据</button>
         </div>
-        
-        <div id="statusMessage" class="status-message"></div>
     </div>
 
     <script>
