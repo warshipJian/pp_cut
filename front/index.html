@@ -362,7 +362,7 @@
                                 <line x1="12" y1="16" x2="12" y2="12"></line>
                                 <line x1="12" y1="8" x2="12" y2="8"></line>
                             </svg>
-                            <span class="tooltip-text">口令用于标识不同的用户，不输入时系统将使用您的公网IP作为标识</span>
+                            <span class="tooltip-text">口令用于区分用户，不输入时系统将使用您的公网IP作为标识</span>
                         </span>
                     </div>
                 </div>
@@ -414,8 +414,29 @@
                 }
             });
             
+            // 防重复点击函数
+            function preventMultipleClicks(func, delay = 500) {
+                let isProcessing = false;
+                return async function(...args) {
+                    if (isProcessing) return;
+                    
+                    isProcessing = true;
+                    const button = this;
+                    button.disabled = true;
+                    
+                    try {
+                        await func.apply(this, args);
+                    } finally {
+                        setTimeout(() => {
+                            button.disabled = false;
+                            isProcessing = false;
+                        }, delay);
+                    }
+                };
+            }
+
             // 获取数据功能
-            getBtn.addEventListener('click', async function() {
+            getBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
                     const password = passwordInput.value.trim();
                     let url = 'http://api.xiaoxiaoguo.cn/c/get';
@@ -434,16 +455,17 @@
                 } catch (error) {
                     showStatus('获取数据失败: ' + error.message, 'error');
                     console.error('获取错误:', error);
+                    throw error; // 确保finally中的恢复逻辑执行
                 }
-            });
+            }));
 
             // 提交数据功能
-            submitBtn.addEventListener('click', async function() {
-                if (!clipboardText.value.trim()) {
-                    showStatus('文本内容为空，将清除服务端数据', 'success');
-                }
-                
+            submitBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
+                    if (!clipboardText.value.trim()) {
+                        showStatus('文本内容为空，将清除服务端数据', 'success');
+                    }
+                    
                     const password = passwordInput.value.trim();
                     const payload = {
                         content: clipboardText.value
@@ -470,8 +492,9 @@
                 } catch (error) {
                     showStatus('提交数据失败: ' + error.message, 'error');
                     console.error('提交错误:', error);
+                    throw error; // 确保finally中的恢复逻辑执行
                 }
-            });
+            }));
             
             // 显示状态消息
             function showStatus(message, type) {
