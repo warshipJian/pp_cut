@@ -1,4 +1,16 @@
-#backend
+# 项目结构
+```
+.
+├── backend (后端代码)
+│   ├── main.go
+├── frontend (前端代码)
+│   ├── index.html
+```
+
+# frontend
+静态页，直接部署
+
+# backend
 
 使用gin框架
 
