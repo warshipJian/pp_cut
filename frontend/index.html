@@ -656,6 +656,13 @@
             letter-spacing: 2px;
         }
 
+        .tv-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
         .tv-password {
             width: 100%;
             min-width: 0;
@@ -675,14 +682,29 @@
         }
 
         .tv-buttons {
+            grid-template-columns: repeat(3, 1fr);
             margin-top: 10px;
         }
 
+        .tv-knobs {
+            grid-row: 1;
+        }
+
+        .tv-control-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+            flex: 1;
+        }
+
         .tv-knob-button {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            padding-top: 14px;
             border: none;
             background: transparent;
             color: #a8a8a8;
@@ -692,16 +714,25 @@
 
         .tv-knob-button::before {
             content: "";
-            width: 64px;
-            height: 64px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             background:
-                linear-gradient(90deg, transparent 48%, rgba(255, 255, 255, 0.45) 48%, rgba(255, 255, 255, 0.45) 52%, transparent 52%) 50% 9px / 6px 12px no-repeat,
+                linear-gradient(135deg, transparent 44%, rgba(255, 255, 255, 0.52) 44%, rgba(255, 255, 255, 0.52) 52%, transparent 52%) 50% 50% / 34px 34px no-repeat,
                 radial-gradient(circle at 36% 28%, #555, #262626 58%, #151515);
             box-shadow:
                 inset 0 8px 12px rgba(255, 255, 255, 0.08),
                 inset 0 -12px 14px rgba(0, 0, 0, 0.45),
                 0 8px 12px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .tv-knob-button:first-child::before {
+            transform: rotate(-24deg);
+        }
+
+        .tv-knob-button:last-child::before {
+            transform: rotate(24deg);
         }
 
         .tv-knob-button small {
@@ -722,14 +753,12 @@
         }
 
         .tv-back-btn {
-            margin-top: auto;
-            justify-self: center;
-            align-self: center;
-            width: 100%;
-            padding: 7px 12px;
-            color: #a8a8a8;
+            flex: none;
+            width: auto;
+            max-width: none;
+            padding: 5px 10px;
             font-family: "Courier New", monospace;
-            font-size: 13px;
+            font-size: 12px;
             letter-spacing: 1px;
         }
         
@@ -923,23 +952,27 @@
 
             <div class="tv-panel">
                 <div class="tv-speaker"></div>
-                <label class="tv-label" for="tvPassword">口令 / TUNING</label>
+                <div class="tv-label-row">
+                    <label class="tv-label" for="tvPassword">口令 / TUNING</label>
+                </div>
                 <input type="text" id="tvPassword" class="tv-password" placeholder="可选（默认按公网 IP）">
-                <div class="tv-knobs">
-                    <button class="tv-knob-button" id="tvGetBtn">
-                        获取
-                        <small>GET</small>
-                    </button>
-                    <button class="tv-knob-button" id="tvSubmitBtn">
-                        提交
-                        <small>SEND</small>
-                    </button>
+                <div class="tv-control-actions">
+                    <div class="tv-knobs">
+                        <button class="tv-knob-button" id="tvGetBtn">
+                            获取
+                            <small>GET</small>
+                        </button>
+                        <button class="tv-knob-button" id="tvSubmitBtn">
+                            提交
+                            <small>SEND</small>
+                        </button>
+                    </div>
+                    <div class="tv-buttons">
+                        <button class="btn" id="tvCopyBtn">复制</button>
+                        <button class="btn" id="tvClearBtn">清空</button>
+                        <button class="btn tv-back-btn" id="standardViewBtn">简洁版</button>
+                    </div>
                 </div>
-                <div class="tv-buttons">
-                    <button class="btn" id="tvCopyBtn">复制</button>
-                    <button class="btn" id="tvClearBtn">清空</button>
-                </div>
-                <button class="btn tv-back-btn" id="standardViewBtn">标准版</button>
             </div>
         </div>
     </div>
