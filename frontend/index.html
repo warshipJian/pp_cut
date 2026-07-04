@@ -700,6 +700,7 @@
 
         .tv-knob-button {
             position: relative;
+            --knob-angle: 0deg;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -710,6 +711,7 @@
             color: #a8a8a8;
             cursor: pointer;
             font-size: 14px;
+            user-select: none;
         }
 
         .tv-knob-button::before {
@@ -724,15 +726,21 @@
                 inset 0 8px 12px rgba(255, 255, 255, 0.08),
                 inset 0 -12px 14px rgba(0, 0, 0, 0.45),
                 0 8px 12px rgba(0, 0, 0, 0.5);
+            transform: rotate(var(--knob-angle));
+            transition: transform 0.08s linear;
             z-index: 1;
         }
 
-        .tv-knob-button:first-child::before {
-            transform: rotate(-24deg);
+        .tv-knob-button.no-transition::before {
+            transition: none;
         }
 
-        .tv-knob-button:last-child::before {
-            transform: rotate(24deg);
+        .tv-knob-button:first-child {
+            --knob-angle: -24deg;
+        }
+
+        .tv-knob-button:last-child {
+            --knob-angle: 24deg;
         }
 
         .tv-knob-button small {
@@ -1178,6 +1186,93 @@
                     }
                 };
             }
+
+            function getKnobAngle(button, event) {
+                const rect = button.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + 43;
+                const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX) * 180 / Math.PI + 90;
+                return angle;
+            }
+
+            function setupRotaryKnob(button, storageKey) {
+                let isPointerDown = false;
+                let suppressClick = false;
+                let pointerStartX = 0;
+                let pointerStartY = 0;
+                let currentAngle = Number.parseFloat(localStorage.getItem(storageKey));
+                if (Number.isNaN(currentAngle)) {
+                    currentAngle = Number.parseFloat(getComputedStyle(button).getPropertyValue('--knob-angle')) || 0;
+                }
+                let lastPointerAngle = 0;
+                button.classList.add('no-transition');
+                setAngle(currentAngle);
+                requestAnimationFrame(() => {
+                    button.classList.remove('no-transition');
+                });
+
+                function setAngle(angle) {
+                    currentAngle = angle;
+                    button.style.setProperty('--knob-angle', `${currentAngle}deg`);
+                    localStorage.setItem(storageKey, String(currentAngle));
+                }
+
+                function getShortestAngleDelta(fromAngle, toAngle) {
+                    return ((toAngle - fromAngle + 540) % 360) - 180;
+                }
+
+                button.addEventListener('pointerdown', function(event) {
+                    if (event.button !== 0) {
+                        return;
+                    }
+
+                    isPointerDown = true;
+                    suppressClick = false;
+                    pointerStartX = event.clientX;
+                    pointerStartY = event.clientY;
+                    lastPointerAngle = getKnobAngle(button, event);
+                    button.setPointerCapture(event.pointerId);
+                });
+
+                button.addEventListener('pointermove', function(event) {
+                    if (isPointerDown) {
+                        const deltaX = event.clientX - pointerStartX;
+                        const deltaY = event.clientY - pointerStartY;
+                        if (Math.hypot(deltaX, deltaY) > 4) {
+                            suppressClick = true;
+                        }
+                    }
+
+                    if (isPointerDown) {
+                        const pointerAngle = getKnobAngle(button, event);
+                        const angleDelta = getShortestAngleDelta(lastPointerAngle, pointerAngle);
+                        setAngle(currentAngle + angleDelta);
+                        lastPointerAngle = pointerAngle;
+                    }
+                });
+
+                button.addEventListener('pointerup', function(event) {
+                    isPointerDown = false;
+                    if (button.hasPointerCapture(event.pointerId)) {
+                        button.releasePointerCapture(event.pointerId);
+                    }
+                });
+
+                button.addEventListener('pointerleave', function() {
+                    isPointerDown = false;
+                });
+
+                button.addEventListener('click', function(event) {
+                    if (suppressClick) {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        suppressClick = false;
+                    }
+                }, true);
+            }
+
+            setupRotaryKnob(tvGetBtn, 'tvGetKnobAngle');
+            setupRotaryKnob(tvSubmitBtn, 'tvSubmitKnobAngle');
 
             // 获取内容功能
             async function getClipboardData(textElement, passwordElement) {
