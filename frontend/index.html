@@ -120,6 +120,10 @@
             flex: none;
             width: 150px;
         }
+
+        .hidden {
+            display: none;
+        }
         
         .form-row {
             display: flex;
@@ -417,6 +421,15 @@
             const statusMessage = document.getElementById('statusMessage');
 
             let statusTimer = null;
+
+            function updateTextActionVisibility() {
+                const hasContent = Boolean(clipboardText.value.trim());
+                copyBtn.classList.toggle('hidden', !hasContent);
+                clearBtn.classList.toggle('hidden', !hasContent);
+            }
+
+            clipboardText.addEventListener('input', updateTextActionVisibility);
+            updateTextActionVisibility();
             
             // 复制到剪切板功能
             copyBtn.addEventListener('click', function() {
@@ -483,6 +496,7 @@
                     }
                     const data = await response.json();
                     clipboardText.value = data.content;
+                    updateTextActionVisibility();
                     showStatus('内容获取成功', 'success');
                 } catch (error) {
                     showStatus('获取内容失败: ' + error.message, 'error');
@@ -538,8 +552,14 @@
             // 清空远端内容功能
             clearBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
+                    const shouldClear = window.confirm('清空内容会把远端内容也清空，是否继续？');
+                    if (!shouldClear) {
+                        return;
+                    }
+
                     await submitClipboardData('');
                     clipboardText.value = '';
+                    updateTextActionVisibility();
                     showStatus('远端内容已清空', 'success');
                 } catch (error) {
                     showStatus('清空远端内容失败: ' + error.message, 'error');
