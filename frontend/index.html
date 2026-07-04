@@ -58,15 +58,25 @@
         }
 
         .description-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            justify-content: center;
             gap: 12px;
             margin-bottom: 25px;
+            padding-right: 15px;
             flex-shrink: 0;
         }
 
+        .description-row .description {
+            grid-column: 2;
+        }
+
         .view-toggle-btn {
+            grid-column: 3;
+            justify-self: end;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             flex: none;
             width: auto;
             max-width: none;
@@ -808,8 +818,9 @@
             }
 
             .description-row {
-                flex-wrap: wrap;
+                grid-template-columns: 1fr auto 1fr;
                 gap: 8px;
+                padding-right: 0;
             }
 
             .tv-view {
@@ -852,7 +863,7 @@
         <h1>平平剪切板</h1>
         <div class="description-row">
             <p class="description">跨设备访问 c.xiaoxiaoguo.cn</p>
-            <button class="btn view-toggle-btn" id="tvViewBtn">电视机版</button>
+            <button class="btn view-toggle-btn" id="tvViewBtn">📺 电视机版</button>
         </div>
         
         <div class="text-area-container">
