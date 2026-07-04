@@ -297,6 +297,57 @@
             color: #721c24;
             display: block;
         }
+
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: rgba(44, 62, 80, 0.42);
+        }
+
+        .confirm-overlay.hidden {
+            display: none;
+        }
+
+        .confirm-dialog {
+            width: 100%;
+            max-width: 360px;
+            padding: 22px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+        }
+
+        .confirm-message {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .confirm-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .confirm-actions .btn {
+            flex: none;
+            width: 96px;
+        }
+
+        .btn-muted {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-muted:hover {
+            background-color: #dfe6e9;
+        }
         
         @media (max-width: 768px) {
             .container {
@@ -410,6 +461,16 @@
         </div>
     </div>
 
+    <div id="confirmOverlay" class="confirm-overlay hidden">
+        <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmMessage">
+            <p id="confirmMessage" class="confirm-message"></p>
+            <div class="confirm-actions">
+                <button class="btn btn-muted" id="confirmCancelBtn">取消</button>
+                <button class="btn btn-danger" id="confirmOkBtn">确认</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const clipboardText = document.getElementById('clipboardText');
@@ -419,8 +480,13 @@
             const clearBtn = document.getElementById('clearBtn');
             const submitBtn = document.getElementById('submitBtn');
             const statusMessage = document.getElementById('statusMessage');
+            const confirmOverlay = document.getElementById('confirmOverlay');
+            const confirmMessage = document.getElementById('confirmMessage');
+            const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+            const confirmOkBtn = document.getElementById('confirmOkBtn');
 
             let statusTimer = null;
+            let confirmResolver = null;
 
             function updateTextActionVisibility() {
                 const hasContent = Boolean(clipboardText.value.trim());
@@ -430,6 +496,44 @@
 
             clipboardText.addEventListener('input', updateTextActionVisibility);
             updateTextActionVisibility();
+
+            function resolveConfirmDialog(result) {
+                if (!confirmResolver) {
+                    return;
+                }
+
+                confirmOverlay.classList.add('hidden');
+                confirmResolver(result);
+                confirmResolver = null;
+            }
+
+            function showConfirmDialog(message) {
+                if (confirmResolver) {
+                    resolveConfirmDialog(false);
+                }
+
+                confirmMessage.textContent = message;
+                confirmOverlay.classList.remove('hidden');
+                confirmOkBtn.focus();
+
+                return new Promise((resolve) => {
+                    confirmResolver = resolve;
+                });
+            }
+
+            confirmCancelBtn.addEventListener('click', function() {
+                resolveConfirmDialog(false);
+            });
+
+            confirmOkBtn.addEventListener('click', function() {
+                resolveConfirmDialog(true);
+            });
+
+            confirmOverlay.addEventListener('click', function(event) {
+                if (event.target === confirmOverlay) {
+                    resolveConfirmDialog(false);
+                }
+            });
             
             // 复制到剪切板功能
             copyBtn.addEventListener('click', function() {
@@ -534,7 +638,7 @@
             submitBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
                     if (!clipboardText.value.trim()) {
-                        const shouldClear = window.confirm('当前提交的是空内容，是否要清空？');
+                        const shouldClear = await showConfirmDialog('空内容会清空远端，是否继续？');
                         if (!shouldClear) {
                             return;
                         }
@@ -552,7 +656,7 @@
             // 清空远端内容功能
             clearBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
-                    const shouldClear = window.confirm('清空内容会把远端内容也清空，是否继续？');
+                    const shouldClear = await showConfirmDialog('清空内容会把远端内容也清空，是否继续？');
                     if (!shouldClear) {
                         return;
                     }
