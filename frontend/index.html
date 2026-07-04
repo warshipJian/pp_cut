@@ -384,10 +384,81 @@
             background-color: #dfe6e9;
         }
 
+        body.tv-mode .confirm-overlay {
+            background-color: rgba(5, 5, 5, 0.72);
+        }
+
+        body.tv-mode .confirm-dialog {
+            max-width: 420px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            background:
+                linear-gradient(145deg, #353535, #171717 70%, #101010);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.2),
+                inset 0 -14px 24px rgba(0, 0, 0, 0.45),
+                0 24px 55px rgba(0, 0, 0, 0.65);
+        }
+
+        body.tv-mode .confirm-message {
+            color: #d8d8d8;
+            font-family: "Courier New", monospace;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
+        }
+
+        body.tv-mode .confirm-actions .btn {
+            border-radius: 8px;
+            color: #f1f1f1;
+            background: linear-gradient(#676767, #242424);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.35),
+                0 5px 10px rgba(0, 0, 0, 0.55);
+        }
+
+        body.tv-mode .confirm-actions .btn:hover {
+            background: linear-gradient(#747474, #2d2d2d);
+        }
+
+        body.tv-mode .confirm-actions .btn-danger {
+            background: linear-gradient(#7a4b4b, #351b1b);
+        }
+
+        body.tv-mode .confirm-actions .btn-danger:hover {
+            background: linear-gradient(#8b5555, #432020);
+        }
+
+        body.tv-mode .status-message {
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 8px;
+            background:
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 4px),
+                linear-gradient(145deg, #2f2f2f, #111);
+            color: #d8d8d8;
+            font-family: "Courier New", monospace;
+            letter-spacing: 1px;
+            text-shadow: 0 0 7px rgba(255, 255, 255, 0.2);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.16),
+                inset 0 -10px 18px rgba(0, 0, 0, 0.42),
+                0 12px 28px rgba(0, 0, 0, 0.5);
+        }
+
+        body.tv-mode .status-success {
+            border-color: rgba(145, 220, 170, 0.28);
+            color: #cfe8d5;
+        }
+
+        body.tv-mode .status-error {
+            border-color: rgba(220, 120, 120, 0.35);
+            color: #f0c6c6;
+        }
+
         .tv-view {
             width: 100%;
-            max-width: 1000px;
-            padding: 34px;
+            max-width: 1180px;
+            padding: 38px;
             border-radius: 28px;
             background: #121212;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
@@ -396,9 +467,9 @@
         .tv-shell {
             position: relative;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) 260px;
-            gap: 24px;
-            padding: 30px;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 30px;
+            padding: 36px 36px 82px;
             border-radius: 28px;
             background: linear-gradient(145deg, #424242, #1f1f1f 68%, #151515);
             box-shadow:
@@ -409,7 +480,7 @@
 
         .tv-screen {
             position: relative;
-            min-height: 385px;
+            min-height: 455px;
             padding: 18px;
             border: 2px solid #090909;
             border-radius: 16px;
@@ -422,6 +493,10 @@
                 0 2px 0 rgba(255, 255, 255, 0.08);
         }
 
+        .tv-screen-section {
+            min-width: 0;
+        }
+
         .tv-screen-header,
         .tv-screen-footer {
             display: flex;
@@ -431,6 +506,26 @@
             font-size: 16px;
             letter-spacing: 1px;
             text-shadow: 0 0 7px rgba(255, 255, 255, 0.55);
+        }
+
+        .tv-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tv-status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #e5e5e5;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .tv-status-dot.active {
+            background-color: #54d66f;
+            box-shadow: 0 0 12px rgba(84, 214, 111, 0.9);
         }
 
         .tv-screen-footer {
@@ -447,7 +542,7 @@
             inset: 58px 18px 54px;
             width: calc(100% - 36px);
             min-height: 0;
-            padding: 0;
+            padding: 0 12px 0 0;
             border: none;
             border-radius: 0;
             resize: none;
@@ -456,6 +551,8 @@
             font-size: 24px;
             line-height: 1.65;
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+            scrollbar-color: #5d5d5d #111;
+            scrollbar-width: thin;
         }
 
         .tv-text:focus {
@@ -463,11 +560,36 @@
             box-shadow: none;
         }
 
+        .tv-text::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .tv-text::-webkit-scrollbar-track {
+            border-radius: 999px;
+            background:
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0, rgba(255, 255, 255, 0.02) 2px, transparent 2px, transparent 5px),
+                #0a0a0a;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.9);
+        }
+
+        .tv-text::-webkit-scrollbar-thumb {
+            border: 2px solid #0a0a0a;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #6a6a6a, #343434);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.35),
+                0 0 8px rgba(255, 255, 255, 0.08);
+        }
+
+        .tv-text::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #7a7a7a, #424242);
+        }
+
         .tv-brand {
             position: absolute;
             left: 32px;
             bottom: 24px;
-            color: #efefef;
+            color: #d8d8d8;
             font-size: 28px;
             font-weight: 700;
             letter-spacing: 8px;
@@ -476,12 +598,13 @@
         .tv-brand-row {
             position: absolute;
             left: 32px;
-            right: 32px;
+            right: 360px;
             bottom: 24px;
             display: flex;
             align-items: baseline;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 18px;
+            min-width: 0;
         }
 
         .tv-brand-row .tv-brand {
@@ -489,17 +612,17 @@
         }
 
         .tv-access {
-            margin-right: auto;
             color: #999;
             font-family: "Courier New", monospace;
             font-size: 13px;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
 
         .tv-panel {
             display: flex;
             flex-direction: column;
-            gap: 22px;
+            gap: 26px;
             padding-top: 2px;
         }
 
@@ -697,6 +820,7 @@
                 align-items: flex-start;
                 flex-direction: column;
                 gap: 6px;
+                margin-top: 14px;
             }
 
             .tv-brand {
@@ -757,11 +881,11 @@
 
     <div class="tv-view hidden" id="tvView">
         <div class="tv-shell">
-            <div>
+            <div class="tv-screen-section">
                 <div class="tv-screen">
                     <div class="tv-screen-header">
                         <span>CH 01</span>
-                        <span>● STBY</span>
+                        <span class="tv-status"><span id="tvStatusDot" class="tv-status-dot"></span> STBY</span>
                     </div>
                     <textarea id="tvText" class="tv-text" placeholder="跨设备剪切板内容"></textarea>
                 </div>
@@ -823,6 +947,7 @@
             const submitBtn = document.getElementById('submitBtn');
             const tvSubmitBtn = document.getElementById('tvSubmitBtn');
             const tvCopyBtn = document.getElementById('tvCopyBtn');
+            const tvStatusDot = document.getElementById('tvStatusDot');
             const statusMessage = document.getElementById('statusMessage');
             const confirmOverlay = document.getElementById('confirmOverlay');
             const confirmMessage = document.getElementById('confirmMessage');
@@ -831,6 +956,7 @@
 
             let statusTimer = null;
             let confirmResolver = null;
+            let tvStatusTimer = null;
 
             function updateTextActionVisibility() {
                 const hasContent = Boolean(clipboardText.value.trim());
@@ -862,6 +988,7 @@
                     standardView.classList.add('hidden');
                     tvView.classList.remove('hidden');
                     document.body.classList.add('tv-mode');
+                    localStorage.setItem('clipboardViewMode', 'tv');
                     tvText.focus();
                     return;
                 }
@@ -871,6 +998,7 @@
                 tvView.classList.add('hidden');
                 standardView.classList.remove('hidden');
                 document.body.classList.remove('tv-mode');
+                localStorage.setItem('clipboardViewMode', 'standard');
                 updateTextActionVisibility();
                 clipboardText.focus();
             }
@@ -882,6 +1010,20 @@
             standardViewBtn.addEventListener('click', function() {
                 setTvMode(false);
             });
+
+            if (localStorage.getItem('clipboardViewMode') === 'tv') {
+                setTvMode(true);
+            }
+
+            function flashTvStatus() {
+                tvStatusDot.classList.add('active');
+                if (tvStatusTimer) {
+                    clearTimeout(tvStatusTimer);
+                }
+                tvStatusTimer = setTimeout(() => {
+                    tvStatusDot.classList.remove('active');
+                }, 1800);
+            }
 
             function resolveConfirmDialog(result) {
                 if (!confirmResolver) {
@@ -1012,6 +1154,7 @@
             tvGetBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
                     await getClipboardData(tvText, tvPassword);
+                    flashTvStatus();
                     showStatus('内容获取成功', 'success');
                 } catch (error) {
                     showStatus('获取内容失败: ' + error.message, 'error');
