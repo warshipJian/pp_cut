@@ -1024,6 +1024,8 @@
             let statusTimer = null;
             let confirmResolver = null;
             let tvStatusTimer = null;
+            const apiProtocol = window.location.protocol === 'file:' ? 'http:' : window.location.protocol;
+            const apiBaseUrl = `${apiProtocol}//api.xiaoxiaoguo.cn`;
 
             function updateTextActionVisibility() {
                 const hasContent = Boolean(clipboardText.value.trim());
@@ -1277,7 +1279,7 @@
             // 获取内容功能
             async function getClipboardData(textElement, passwordElement) {
                 const password = passwordElement.value.trim();
-                let url = 'http://api.xiaoxiaoguo.cn/c/get';
+                let url = `${apiBaseUrl}/c/get`;
 
                 if (password) {
                     url += `?password=${encodeURIComponent(password)}`;
@@ -1327,7 +1329,7 @@
                     payload.password = password;
                 }
 
-                const response = await fetch('http://api.xiaoxiaoguo.cn/c/submit', {
+                const response = await fetch(`${apiBaseUrl}/c/submit`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
