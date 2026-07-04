@@ -22,6 +22,10 @@
             align-items: center;
             min-height: 100vh;
         }
+
+        body.tv-mode {
+            background-color: #101010;
+        }
         
         .container {
             background-color: white;
@@ -48,10 +52,33 @@
         .description {
             text-align: center;
             color: #3498db;
-            margin-bottom: 25px;
             font-size: 18px;
             flex-shrink: 0;
             font-weight: 500;
+        }
+
+        .description-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+
+        .view-toggle-btn {
+            flex: none;
+            width: auto;
+            max-width: none;
+            padding: 6px 12px;
+            border: 1px solid #d5e3ef;
+            background-color: #f8fbfd;
+            color: #2c3e50;
+        }
+
+        .view-toggle-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
         }
         
         .text-area-container {
@@ -126,6 +153,10 @@
         }
 
         .hidden {
+            display: none;
+        }
+
+        .text-action-buttons.hidden {
             display: none;
         }
         
@@ -352,6 +383,207 @@
         .btn-muted:hover {
             background-color: #dfe6e9;
         }
+
+        .tv-view {
+            width: 100%;
+            max-width: 1000px;
+            padding: 34px;
+            border-radius: 28px;
+            background: #121212;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .tv-shell {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 260px;
+            gap: 24px;
+            padding: 30px;
+            border-radius: 28px;
+            background: linear-gradient(145deg, #424242, #1f1f1f 68%, #151515);
+            box-shadow:
+                inset 0 2px 2px rgba(255, 255, 255, 0.22),
+                inset 0 -18px 30px rgba(0, 0, 0, 0.45),
+                0 28px 50px rgba(0, 0, 0, 0.55);
+        }
+
+        .tv-screen {
+            position: relative;
+            min-height: 385px;
+            padding: 18px;
+            border: 2px solid #090909;
+            border-radius: 16px;
+            overflow: hidden;
+            background:
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0.035) 1px, transparent 1px, transparent 4px),
+                radial-gradient(circle at 50% 20%, #171717, #050505 70%);
+            box-shadow:
+                inset 0 0 45px rgba(0, 0, 0, 0.9),
+                0 2px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .tv-screen-header,
+        .tv-screen-footer {
+            display: flex;
+            justify-content: space-between;
+            color: #d5d5d5;
+            font-family: "Courier New", monospace;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 7px rgba(255, 255, 255, 0.55);
+        }
+
+        .tv-screen-footer {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 15px;
+            color: #a7a7a7;
+            font-size: 14px;
+        }
+
+        .tv-text {
+            position: absolute;
+            inset: 58px 18px 54px;
+            width: calc(100% - 36px);
+            min-height: 0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            resize: none;
+            background: transparent;
+            color: #e8e8e8;
+            font-size: 24px;
+            line-height: 1.65;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+        }
+
+        .tv-text:focus {
+            border: none;
+            box-shadow: none;
+        }
+
+        .tv-brand {
+            position: absolute;
+            left: 32px;
+            bottom: 24px;
+            color: #efefef;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 8px;
+        }
+
+        .tv-brand-row {
+            position: absolute;
+            left: 32px;
+            right: 32px;
+            bottom: 24px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .tv-brand-row .tv-brand {
+            position: static;
+        }
+
+        .tv-access {
+            margin-right: auto;
+            color: #999;
+            font-family: "Courier New", monospace;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .tv-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            padding-top: 2px;
+        }
+
+        .tv-speaker {
+            height: 64px;
+            border-radius: 12px;
+            background:
+                radial-gradient(#050505 1.5px, transparent 1.5px) 0 0 / 8px 8px,
+                linear-gradient(#222, #111);
+            box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8);
+        }
+
+        .tv-label {
+            color: #b5b5b5;
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .tv-password {
+            width: 100%;
+            min-width: 0;
+            padding: 11px 12px;
+            border: 1px solid #4a4a4a;
+            border-radius: 8px;
+            background-color: #101010;
+            color: #e8e8e8;
+            font-size: 15px;
+        }
+
+        .tv-knobs,
+        .tv-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .tv-knob-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            background: transparent;
+            color: #a8a8a8;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tv-knob-button::before {
+            content: "";
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background:
+                linear-gradient(90deg, transparent 48%, rgba(255, 255, 255, 0.45) 48%, rgba(255, 255, 255, 0.45) 52%, transparent 52%) 50% 9px / 6px 12px no-repeat,
+                radial-gradient(circle at 36% 28%, #555, #262626 58%, #151515);
+            box-shadow:
+                inset 0 8px 12px rgba(255, 255, 255, 0.08),
+                inset 0 -12px 14px rgba(0, 0, 0, 0.45),
+                0 8px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .tv-knob-button small {
+            color: #666;
+            font-family: "Courier New", monospace;
+            font-size: 12px;
+        }
+
+        .tv-buttons .btn,
+        .tv-back-btn {
+            width: 100%;
+            max-width: none;
+            border-radius: 8px;
+            background: linear-gradient(#666, #242424);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.35),
+                0 4px 8px rgba(0, 0, 0, 0.55);
+        }
+
+        .tv-back-btn {
+            margin-top: auto;
+            color: #f2f2f2;
+        }
         
         @media (max-width: 768px) {
             .container {
@@ -436,15 +668,53 @@
                 width: min(150px, calc((100% - 10px) / 2));
                 flex: 1 1 130px;
             }
+
+            .description-row {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .tv-view {
+                padding: 14px;
+            }
+
+            .tv-shell {
+                grid-template-columns: 1fr;
+                padding: 18px;
+                gap: 18px;
+            }
+
+            .tv-screen {
+                min-height: 320px;
+            }
+
+            .tv-text {
+                font-size: 18px;
+            }
+
+            .tv-brand-row {
+                position: static;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .tv-brand {
+                font-size: 22px;
+            }
+
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>平平剪切板</h1>
-        <p class="description">跨设备访问 c.xiaoxiaoguo.cn</p>
+    <div id="statusMessage" class="status-message"></div>
 
-        <div id="statusMessage" class="status-message"></div>
+    <div class="container" id="standardView">
+        <h1>平平剪切板</h1>
+        <div class="description-row">
+            <p class="description">跨设备访问 c.xiaoxiaoguo.cn</p>
+            <button class="btn view-toggle-btn" id="tvViewBtn">电视机版</button>
+        </div>
         
         <div class="text-area-container">
             <textarea id="clipboardText" placeholder="在此输入或粘贴文本内容..."></textarea>
@@ -485,6 +755,45 @@
         </div>
     </div>
 
+    <div class="tv-view hidden" id="tvView">
+        <div class="tv-shell">
+            <div>
+                <div class="tv-screen">
+                    <div class="tv-screen-header">
+                        <span>CH 01</span>
+                        <span>● STBY</span>
+                    </div>
+                    <textarea id="tvText" class="tv-text" placeholder="跨设备剪切板内容"></textarea>
+                </div>
+                <div class="tv-brand-row">
+                    <div class="tv-brand">平平剪切板</div>
+                    <div class="tv-access">其他设备访问 c.xiaoxiaoguo.cn</div>
+                </div>
+            </div>
+
+            <div class="tv-panel">
+                <div class="tv-speaker"></div>
+                <label class="tv-label" for="tvPassword">口令 / TUNING</label>
+                <input type="text" id="tvPassword" class="tv-password" placeholder="可选（默认按公网 IP）">
+                <div class="tv-knobs">
+                    <button class="tv-knob-button" id="tvGetBtn">
+                        获取
+                        <small>GET</small>
+                    </button>
+                    <button class="tv-knob-button" id="tvSubmitBtn">
+                        提交
+                        <small>SEND</small>
+                    </button>
+                </div>
+                <div class="tv-buttons">
+                    <button class="btn" id="tvCopyBtn">复制</button>
+                    <button class="btn" id="tvClearBtn">清空</button>
+                </div>
+                <button class="btn tv-back-btn" id="standardViewBtn">标准版</button>
+            </div>
+        </div>
+    </div>
+
     <div id="confirmOverlay" class="confirm-overlay hidden">
         <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmMessage">
             <p id="confirmMessage" class="confirm-message"></p>
@@ -497,13 +806,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const standardView = document.getElementById('standardView');
+            const tvView = document.getElementById('tvView');
+            const tvViewBtn = document.getElementById('tvViewBtn');
+            const standardViewBtn = document.getElementById('standardViewBtn');
             const clipboardText = document.getElementById('clipboardText');
+            const tvText = document.getElementById('tvText');
             const copyBtn = document.getElementById('copyBtn');
             const textActionButtons = document.querySelector('.text-action-buttons');
             const passwordInput = document.getElementById('passwordInput');
+            const tvPassword = document.getElementById('tvPassword');
             const getBtn = document.getElementById('getBtn');
+            const tvGetBtn = document.getElementById('tvGetBtn');
             const clearBtn = document.getElementById('clearBtn');
+            const tvClearBtn = document.getElementById('tvClearBtn');
             const submitBtn = document.getElementById('submitBtn');
+            const tvSubmitBtn = document.getElementById('tvSubmitBtn');
+            const tvCopyBtn = document.getElementById('tvCopyBtn');
             const statusMessage = document.getElementById('statusMessage');
             const confirmOverlay = document.getElementById('confirmOverlay');
             const confirmMessage = document.getElementById('confirmMessage');
@@ -521,7 +840,48 @@
             }
 
             clipboardText.addEventListener('input', updateTextActionVisibility);
+            clipboardText.addEventListener('input', function() {
+                tvText.value = clipboardText.value;
+            });
+            tvText.addEventListener('input', function() {
+                clipboardText.value = tvText.value;
+                updateTextActionVisibility();
+            });
+            passwordInput.addEventListener('input', function() {
+                tvPassword.value = passwordInput.value;
+            });
+            tvPassword.addEventListener('input', function() {
+                passwordInput.value = tvPassword.value;
+            });
             updateTextActionVisibility();
+
+            function setTvMode(enabled) {
+                if (enabled) {
+                    tvText.value = clipboardText.value;
+                    tvPassword.value = passwordInput.value;
+                    standardView.classList.add('hidden');
+                    tvView.classList.remove('hidden');
+                    document.body.classList.add('tv-mode');
+                    tvText.focus();
+                    return;
+                }
+
+                clipboardText.value = tvText.value;
+                passwordInput.value = tvPassword.value;
+                tvView.classList.add('hidden');
+                standardView.classList.remove('hidden');
+                document.body.classList.remove('tv-mode');
+                updateTextActionVisibility();
+                clipboardText.focus();
+            }
+
+            tvViewBtn.addEventListener('click', function() {
+                setTvMode(true);
+            });
+
+            standardViewBtn.addEventListener('click', function() {
+                setTvMode(false);
+            });
 
             function resolveConfirmDialog(result) {
                 if (!confirmResolver) {
@@ -562,15 +922,15 @@
             });
             
             // 复制到剪切板功能
-            copyBtn.addEventListener('click', function() {
-                if (!clipboardText.value.trim()) {
+            function copyTextContent(textElement) {
+                if (!textElement.value.trim()) {
                     showStatus('文本内容为空，无法复制', 'error');
                     return;
                 }
                 
                 // 创建临时textarea元素
                 const tempTextArea = document.createElement('textarea');
-                tempTextArea.value = clipboardText.value;
+                tempTextArea.value = textElement.value;
                 document.body.appendChild(tempTextArea);
                 tempTextArea.select();
                 
@@ -587,6 +947,14 @@
                 } finally {
                     document.body.removeChild(tempTextArea);
                 }
+            }
+
+            copyBtn.addEventListener('click', function() {
+                copyTextContent(clipboardText);
+            });
+
+            tvCopyBtn.addEventListener('click', function() {
+                copyTextContent(tvText);
             });
             
             // 防重复点击函数
@@ -611,22 +979,28 @@
             }
 
             // 获取内容功能
+            async function getClipboardData(textElement, passwordElement) {
+                const password = passwordElement.value.trim();
+                let url = 'http://api.xiaoxiaoguo.cn/c/get';
+
+                if (password) {
+                    url += `?password=${encodeURIComponent(password)}`;
+                }
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('获取内容失败');
+                }
+                const data = await response.json();
+                textElement.value = data.content;
+                clipboardText.value = data.content;
+                tvText.value = data.content;
+                updateTextActionVisibility();
+            }
+
             getBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
-                    const password = passwordInput.value.trim();
-                    let url = 'http://api.xiaoxiaoguo.cn/c/get';
-                    
-                    if (password) {
-                        url += `?password=${encodeURIComponent(password)}`;
-                    }
-                    
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error('获取内容失败');
-                    }
-                    const data = await response.json();
-                    clipboardText.value = data.content;
-                    updateTextActionVisibility();
+                    await getClipboardData(clipboardText, passwordInput);
                     showStatus('内容获取成功', 'success');
                 } catch (error) {
                     showStatus('获取内容失败: ' + error.message, 'error');
@@ -635,8 +1009,19 @@
                 }
             }));
 
-            async function submitClipboardData(content) {
-                const password = passwordInput.value.trim();
+            tvGetBtn.addEventListener('click', preventMultipleClicks(async function() {
+                try {
+                    await getClipboardData(tvText, tvPassword);
+                    showStatus('内容获取成功', 'success');
+                } catch (error) {
+                    showStatus('获取内容失败: ' + error.message, 'error');
+                    console.error('获取错误:', error);
+                    throw error; // 确保finally中的恢复逻辑执行
+                }
+            }));
+
+            async function submitClipboardData(content, passwordElement = passwordInput) {
+                const password = passwordElement.value.trim();
                 const payload = {
                     content: content
                 };
@@ -670,7 +1055,28 @@
                         }
                     }
 
-                    await submitClipboardData(clipboardText.value);
+                    await submitClipboardData(clipboardText.value, passwordInput);
+                    tvText.value = clipboardText.value;
+                    showStatus('提交内容成功', 'success');
+                } catch (error) {
+                    showStatus('提交内容失败: ' + error.message, 'error');
+                    console.error('提交错误:', error);
+                    throw error; // 确保finally中的恢复逻辑执行
+                }
+            }));
+
+            tvSubmitBtn.addEventListener('click', preventMultipleClicks(async function() {
+                try {
+                    if (!tvText.value.trim()) {
+                        const shouldClear = await showConfirmDialog('空内容会清空远端，是否继续？');
+                        if (!shouldClear) {
+                            return;
+                        }
+                    }
+
+                    await submitClipboardData(tvText.value, tvPassword);
+                    clipboardText.value = tvText.value;
+                    updateTextActionVisibility();
                     showStatus('提交内容成功', 'success');
                 } catch (error) {
                     showStatus('提交内容失败: ' + error.message, 'error');
@@ -680,17 +1086,36 @@
             }));
 
             // 清空远端内容功能
+            async function clearRemoteContent(passwordElement) {
+                const shouldClear = await showConfirmDialog('清空内容会把远端内容也清空，是否继续？');
+                if (!shouldClear) {
+                    return false;
+                }
+
+                await submitClipboardData('', passwordElement);
+                clipboardText.value = '';
+                tvText.value = '';
+                updateTextActionVisibility();
+                return true;
+            }
+
             clearBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
-                    const shouldClear = await showConfirmDialog('清空内容会把远端内容也清空，是否继续？');
-                    if (!shouldClear) {
-                        return;
+                    if (await clearRemoteContent(passwordInput)) {
+                        showStatus('远端内容已清空', 'success');
                     }
+                } catch (error) {
+                    showStatus('清空远端内容失败: ' + error.message, 'error');
+                    console.error('清空错误:', error);
+                    throw error; // 确保finally中的恢复逻辑执行
+                }
+            }));
 
-                    await submitClipboardData('');
-                    clipboardText.value = '';
-                    updateTextActionVisibility();
-                    showStatus('远端内容已清空', 'success');
+            tvClearBtn.addEventListener('click', preventMultipleClicks(async function() {
+                try {
+                    if (await clearRemoteContent(tvPassword)) {
+                        showStatus('远端内容已清空', 'success');
+                    }
                 } catch (error) {
                     showStatus('清空远端内容失败: ' + error.message, 'error');
                     console.error('清空错误:', error);
