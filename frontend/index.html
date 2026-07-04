@@ -67,7 +67,7 @@
             width: 100%;
             height: 100%;
             min-height: 300px;
-            padding: 15px;
+            padding: 15px 15px 58px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
@@ -97,8 +97,11 @@
             transition: background-color 0.3s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 5px;
             z-index: 10;
+            width: 150px;
+            white-space: nowrap;
         }
         
         .copy-btn:hover {
@@ -107,6 +110,15 @@
         
         .copy-btn:active {
             transform: translateY(1px);
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            z-index: 10;
+            flex: none;
+            width: 150px;
         }
         
         .form-row {
@@ -197,16 +209,18 @@
         
         .action-buttons {
             display: flex;
+            justify-content: flex-end;
             gap: 12px;
             flex-shrink: 0;
             flex: 1;
             min-width: 0;
+            padding-right: 15px;
         }
         
         .action-buttons .btn {
-            flex: 1;
+            flex: none;
             min-width: 0;
-            max-width: none;
+            width: 150px;
         }
         
         .btn {
@@ -237,6 +251,15 @@
         
         .btn-secondary:hover {
             background-color: #27ae60;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
         }
         
         .status-message {
@@ -313,13 +336,15 @@
             
             .action-buttons {
                 flex-direction: row;
+                justify-content: flex-end;
                 gap: 10px;
+                padding-right: 12px;
             }
             
             .btn {
-                width: auto;
+                width: 150px;
                 max-width: none;
-                flex: 1;
+                flex: none;
             }
             
             .copy-btn {
@@ -329,13 +354,18 @@
                 margin-top: 15px;
                 justify-content: center;
             }
+
+            .clear-btn {
+                right: 12px;
+                bottom: 64px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>平平剪切板</h1>
-        <p class="description">其他设备访问 c.xiaoxiaoguo.cn 获取数据</p>
+        <p class="description">其他设备访问 c.xiaoxiaoguo.cn 获取内容</p>
 
         <div id="statusMessage" class="status-message"></div>
         
@@ -348,6 +378,7 @@
                 </svg>
                 复制到剪切板
             </button>
+            <button class="btn btn-danger clear-btn" id="clearBtn">清空内容</button>
         </div>
         
         <div class="form-row">
@@ -369,8 +400,8 @@
             </div>
             
             <div class="action-buttons">
-                <button class="btn btn-primary" id="getBtn">获取数据</button>
-                <button class="btn btn-secondary" id="submitBtn">提交数据</button>
+                <button class="btn btn-secondary" id="submitBtn">提交内容</button>
+                <button class="btn btn-primary" id="getBtn">获取内容</button>
             </div>
         </div>
     </div>
@@ -381,6 +412,7 @@
             const copyBtn = document.getElementById('copyBtn');
             const passwordInput = document.getElementById('passwordInput');
             const getBtn = document.getElementById('getBtn');
+            const clearBtn = document.getElementById('clearBtn');
             const submitBtn = document.getElementById('submitBtn');
             const statusMessage = document.getElementById('statusMessage');
 
@@ -435,7 +467,7 @@
                 };
             }
 
-            // 获取数据功能
+            // 获取内容功能
             getBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
                     const password = passwordInput.value.trim();
@@ -447,51 +479,71 @@
                     
                     const response = await fetch(url);
                     if (!response.ok) {
-                        throw new Error('获取数据失败');
+                        throw new Error('获取内容失败');
                     }
                     const data = await response.json();
                     clipboardText.value = data.content;
-                    showStatus('数据获取成功', 'success');
+                    showStatus('内容获取成功', 'success');
                 } catch (error) {
-                    showStatus('获取数据失败: ' + error.message, 'error');
+                    showStatus('获取内容失败: ' + error.message, 'error');
                     console.error('获取错误:', error);
                     throw error; // 确保finally中的恢复逻辑执行
                 }
             }));
 
-            // 提交数据功能
+            async function submitClipboardData(content) {
+                const password = passwordInput.value.trim();
+                const payload = {
+                    content: content
+                };
+
+                if (password) {
+                    payload.password = password;
+                }
+
+                const response = await fetch('http://api.xiaoxiaoguo.cn/c/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('提交内容失败');
+                }
+
+                return response.json();
+            }
+
+            // 提交内容功能
             submitBtn.addEventListener('click', preventMultipleClicks(async function() {
                 try {
                     if (!clipboardText.value.trim()) {
-                        showStatus('文本内容为空，将清除服务端数据', 'success');
+                        const shouldClear = window.confirm('当前提交的是空内容，是否要清空？');
+                        if (!shouldClear) {
+                            return;
+                        }
                     }
-                    
-                    const password = passwordInput.value.trim();
-                    const payload = {
-                        content: clipboardText.value
-                    };
-                    
-                    if (password) {
-                        payload.password = password;
-                    }
-                    
-                    const response = await fetch('http://api.xiaoxiaoguo.cn/c/submit', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error('提交数据失败');
-                    }
-                    
-                    const result = await response.json();
-                    showStatus('提交数据成功', 'success');
+
+                    await submitClipboardData(clipboardText.value);
+                    showStatus('提交内容成功', 'success');
                 } catch (error) {
-                    showStatus('提交数据失败: ' + error.message, 'error');
+                    showStatus('提交内容失败: ' + error.message, 'error');
                     console.error('提交错误:', error);
+                    throw error; // 确保finally中的恢复逻辑执行
+                }
+            }));
+
+            // 清空远端内容功能
+            clearBtn.addEventListener('click', preventMultipleClicks(async function() {
+                try {
+                    await submitClipboardData('');
+                    clipboardText.value = '';
+                    showStatus('远端内容已清空', 'success');
+                } catch (error) {
+                    showStatus('清空远端内容失败: ' + error.message, 'error');
+                    console.error('清空错误:', error);
                     throw error; // 确保finally中的恢复逻辑执行
                 }
             }));
