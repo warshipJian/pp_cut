@@ -1,0 +1,7 @@
+{
+  "name": "pp-cut-miniprogram",
+  "private": true,
+  "scripts": {
+    "config": "node scripts/sync-project-config.js"
+  }
+}

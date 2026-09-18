@@ -1,0 +1,28 @@
+<view class="page">
+  <view class="tv-shell">
+    <view class="screen-section">
+      <view class="screen">
+        <view class="screen-head"><text>CH 01</text><text class="status {{active ? 'active' : ''}}">● {{active ? 'ON AIR' : 'STBY'}}</text></view>
+        <textarea class="tv-text" value="{{content}}" placeholder="跨设备剪切板内容" maxlength="-1" bindinput="onContentInput" />
+        <view class="screen-foot"><text>PP CLIPBOARD</text><text>TEXT CHANNEL</text></view>
+      </view>
+      <view class="brand">平平剪切板</view>
+      <view class="access">其他设备访问 c.xiaoxiaoguo.cn</view>
+    </view>
+
+    <view class="panel">
+      <view class="speaker"></view>
+      <text class="panel-label">口令 / TUNING</text>
+      <input class="password" value="{{password}}" placeholder="可选（默认按公网 IP）" maxlength="100" bindinput="onPasswordInput" />
+      <view class="knobs">
+        <button class="knob" loading="{{getting}}" disabled="{{getting || submitting}}" bindtap="getContent"><view>获取</view><text>GET</text></button>
+        <button class="knob" loading="{{submitting}}" disabled="{{getting || submitting}}" bindtap="submitContent"><view>提交</view><text>SEND</text></button>
+      </view>
+      <view class="buttons">
+        <button bindtap="copyContent">复制</button>
+        <button bindtap="clearRemote">清空</button>
+        <button bindtap="goStandard">简洁版</button>
+      </view>
+    </view>
+  </view>
+</view>

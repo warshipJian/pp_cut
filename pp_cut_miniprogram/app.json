@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/tv/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "平平剪切板",
+    "navigationBarBackgroundColor": "#f5f7fa",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f7fa"
+  },
+  "style": "v2"
+}

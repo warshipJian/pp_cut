@@ -1,0 +1,4 @@
+{
+  "desc": "平平剪切板",
+  "rules": [{ "action": "allow", "page": "*" }]
+}

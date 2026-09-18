@@ -1,0 +1,31 @@
+<view class="page">
+  <view class="card">
+    <view class="header">
+      <view class="title">平平剪切板</view>
+      <view class="sub-row">
+        <text class="subtitle">跨设备访问 c.xiaoxiaoguo.cn</text>
+        <button class="tv-link" size="mini" bindtap="goTv">电视机版</button>
+      </view>
+    </view>
+
+    <view class="editor-wrap">
+      <textarea class="editor" value="{{content}}" placeholder="在此输入或粘贴文本内容..." maxlength="-1" auto-height="false" bindinput="onContentInput" />
+    </view>
+
+    <view wx:if="{{hasContent}}" class="text-actions">
+      <button class="button primary" bindtap="copyContent">复制到剪切板</button>
+      <button class="button danger" bindtap="clearRemote">清空内容</button>
+    </view>
+
+    <view class="form-area">
+      <view class="password-row">
+        <text class="label">口令</text>
+        <input class="password" value="{{password}}" placeholder="可选（不填时按公网 IP 区分）" maxlength="100" bindinput="onPasswordInput" />
+      </view>
+      <view class="actions">
+        <button class="button secondary" loading="{{submitting}}" disabled="{{submitting || getting}}" bindtap="submitContent">提交内容</button>
+        <button class="button primary" loading="{{getting}}" disabled="{{submitting || getting}}" bindtap="getContent">获取内容</button>
+      </view>
+    </view>
+  </view>
+</view>

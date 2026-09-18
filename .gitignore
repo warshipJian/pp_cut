@@ -2,3 +2,8 @@ backend/go.sum
 backend/nohup.out
 backend/pp_cut
 .vscode/
+
+# 微信开发者工具的本机私有配置
+pp_cut_miniprogram/project.private.config.json
+pp_cut_miniprogram/.env
+pp_cut_miniprogram/project.config.json

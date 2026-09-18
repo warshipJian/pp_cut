@@ -1,0 +1,20 @@
+.page { padding: 32rpx 24rpx 48rpx; }
+.card { min-height: calc(100vh - 80rpx); padding: 44rpx 32rpx 36rpx; border-radius: 24rpx; background: #fff; box-shadow: 0 10rpx 36rpx rgba(44, 62, 80, .1); }
+.header { margin-bottom: 32rpx; text-align: center; }
+.title { color: #2c3e50; font-size: 48rpx; font-weight: 600; }
+.sub-row { display: flex; align-items: center; justify-content: center; margin-top: 12rpx; }
+.subtitle { color: #3498db; font-size: 28rpx; }
+.tv-link { margin: 0 0 0 18rpx; padding: 4rpx 16rpx; border: 1rpx solid #cfd8df; border-radius: 999rpx; background: #eef3f6; color: #75838c; font-size: 22rpx; line-height: 1.6; }
+.editor-wrap { height: 58vh; min-height: 480rpx; overflow: hidden; border: 1rpx solid #dce2e7; border-radius: 16rpx; }
+.editor { width: 100%; height: 100%; padding: 26rpx; color: #333; font-size: 30rpx; line-height: 1.6; box-sizing: border-box; }
+.text-actions, .actions { display: flex; justify-content: flex-end; gap: 20rpx; margin-top: 24rpx; }
+.form-area { display: flex; align-items: center; justify-content: space-between; gap: 24rpx; margin-top: 28rpx; }
+.password-row { display: flex; flex: 1; align-items: center; min-width: 0; }
+.label { flex: none; margin-right: 18rpx; font-size: 29rpx; font-weight: 500; }
+.password { flex: 1; min-width: 0; height: 72rpx; padding: 0 18rpx; border: 1rpx solid #dce2e7; border-radius: 12rpx; font-size: 27rpx; }
+.actions { flex: none; margin-top: 0; }
+.button { min-width: 152rpx; margin: 0; padding: 0 22rpx; border-radius: 12rpx; color: #fff; font-size: 27rpx; line-height: 76rpx; }
+.primary { background: #3498db; }
+.secondary { background: #2ecc71; }
+.danger { background: #e74c3c; }
+@media (max-width: 650px) { .card { padding: 36rpx 24rpx; } .editor-wrap { height: 50vh; } .form-area { display: block; } .actions { margin-top: 24rpx; } .text-actions .button, .actions .button { flex: 1; } }
